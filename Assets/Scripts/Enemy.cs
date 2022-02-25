@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private Platform _platformPatrol;
     [SerializeField] private float _speed;
+
     private Rigidbody2D _rigidbody2D;
     private Direction _direction = Direction.Right;
 

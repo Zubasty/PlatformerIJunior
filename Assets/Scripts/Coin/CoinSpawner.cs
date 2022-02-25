@@ -3,30 +3,30 @@ using UnityEngine;
 
 public class CoinSpawner : MonoBehaviour
 {
-    [SerializeField] private List<Transform> _pointsForSpawn;
-    [SerializeField] private Coin _coinPrefab;
-    [SerializeField] private int _countCoins;
+    [SerializeField] private List<Transform> _points;
+    [SerializeField] private Coin _prefab;
+    [SerializeField] private int _count;
     [SerializeField] private float _offsetY;
 
-    private Dictionary<Transform, Coin> _coinsSpawned = new Dictionary<Transform, Coin>();
+    private Dictionary<Transform, Coin> _pointCoin = new Dictionary<Transform, Coin>();
 
     private void OnValidate()
     {
-        if(_countCoins > _pointsForSpawn.Count)
+        if(_count > _points.Count)
         {
-            _countCoins = _pointsForSpawn.Count;
+            _count = _points.Count;
             Debug.LogError("Количество монеток не может быть больше количества точек спавна");
         }
-        if (_countCoins < 0)
+        if (_count < 0)
         {
-            _countCoins = 0;
+            _count = 0;
             Debug.LogError("Количество монеток не может быть отрицательным");
         }
     }
 
     private void Start()
     {
-        for(int i = 0; i< _countCoins; i++)
+        for(int i = 0; i< _count; i++)
         {
             Spawn();
         }
@@ -34,28 +34,28 @@ public class CoinSpawner : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach(var pair in _coinsSpawned)
+        foreach(var pair in _pointCoin)
         {
-            pair.Value.Taked -= OnTakedCoin;
+            pair.Value.Taken -= OnTaken;
         }
     }
 
     private Coin Spawn()
     {
-        Transform point = _pointsForSpawn[Random.Range(0, _pointsForSpawn.Count)];
-        _pointsForSpawn.Remove(point);
-        Coin coin = Instantiate(_coinPrefab, new Vector3(point.position.x, 
+        Transform point = _points[Random.Range(0, _points.Count)];
+        _points.Remove(point);
+        Coin coin = Instantiate(_prefab, new Vector3(point.position.x, 
             point.position.y + _offsetY, point.position.z), Quaternion.identity);
-        _coinsSpawned.Add(point, coin);
-        coin.Taked += OnTakedCoin;
+        _pointCoin.Add(point, coin);
+        coin.Taken += OnTaken;
         return coin;
     }
 
-    private void OnTakedCoin(Coin coin)
+    private void OnTaken(Coin coin)
     {
         Transform point = null;
 
-        foreach(var pointCoin in _coinsSpawned)
+        foreach(var pointCoin in _pointCoin)
         {
             if(pointCoin.Value == coin)
             {
@@ -63,8 +63,8 @@ public class CoinSpawner : MonoBehaviour
                 break;
             }
         }
-        _coinsSpawned.Remove(point);
+        _pointCoin.Remove(point);
         Spawn();
-        _pointsForSpawn.Add(point);       
+        _points.Add(point);       
     }
 }

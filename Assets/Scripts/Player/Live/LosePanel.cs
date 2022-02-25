@@ -7,6 +7,7 @@ public class LosePanel : MonoBehaviour
 {
     [SerializeField] private PlayerLive _player;
     [SerializeField] private Button _restart;
+
     private CanvasGroup _panel;
 
     private void Awake()

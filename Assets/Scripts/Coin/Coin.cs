@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    public event Action<Coin> Taked;
+    public event Action<Coin> Taken;
 
     public void Die()
     {
-        Taked?.Invoke(this);
+        Taken?.Invoke(this);
         Destroy(gameObject);
     }
 }
