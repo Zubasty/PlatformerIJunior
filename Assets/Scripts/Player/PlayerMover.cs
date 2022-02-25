@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMove : MonoBehaviour
+public class PlayerMover : MonoBehaviour
 {
-    private const float MIN_MOVE_DISTANCE = 0.001f;
-    private const float SHELL_RADIUS = 0.01f;
+    private const float MinMoveDistance = 0.001f;
+    private const float ShellRadius = 0.01f;
 
     [SerializeField, Range(0,1)] private float _minGroundNormalY = 0.65f;
     [SerializeField] private float _gravityModifier = 1f;
@@ -27,19 +27,19 @@ public class PlayerMove : MonoBehaviour
 
     public event Action<Vector2> UpdatedVelocity;
 
-    void OnEnable()
+    private void OnEnable()
     {
         _rb2d = GetComponent<Rigidbody2D>();
     }
 
-    void Start()
+    private void Start()
     {
         _contactFilter.useTriggers = false;
         _contactFilter.SetLayerMask(_layerMask);
         _contactFilter.useLayerMask = true;
     }
 
-    void Update()
+    private void Update()
     {
         _rb2d.velocity = new Vector2();
         float x = 0;
@@ -59,7 +59,7 @@ public class PlayerMove : MonoBehaviour
         UpdatedVelocity?.Invoke(new Vector2(x, _velocity.y));
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         _velocity += _gravityModifier * Physics2D.gravity * Time.deltaTime;
         _velocity.x = _targetVelocity.x;
@@ -67,18 +67,18 @@ public class PlayerMove : MonoBehaviour
         Vector2 deltaPosition = _velocity * Time.deltaTime;
         Vector2 moveAlongGround = new Vector2(_groundNormal.y, -_groundNormal.x);
         Vector2 move = moveAlongGround * deltaPosition.x;
-        Movement(move, false);
+        Move(move, false);
         move = Vector2.up * deltaPosition.y;
-        Movement(move, true);      
+        Move(move, true);      
     }
 
-    void Movement(Vector2 move, bool yMovement)
+    private void Move(Vector2 move, bool yMovement)
     {
         float distance = move.magnitude;
 
-        if (distance > MIN_MOVE_DISTANCE)
+        if (distance > MinMoveDistance)
         {
-            int count = _rb2d.Cast(move, _contactFilter, _hitBuffer, distance + SHELL_RADIUS);
+            int count = _rb2d.Cast(move, _contactFilter, _hitBuffer, distance + ShellRadius);
             _hitBufferList.Clear();
 
             for (int i = 0; i < count; i++)
@@ -105,7 +105,7 @@ public class PlayerMove : MonoBehaviour
                 {
                     _velocity = _velocity - projection * currentNormal;
                 }
-                float modifiedDistance = _hitBufferList[i].distance - SHELL_RADIUS;
+                float modifiedDistance = _hitBufferList[i].distance - ShellRadius;
                 distance = modifiedDistance < distance ? modifiedDistance : distance;
             }
         }

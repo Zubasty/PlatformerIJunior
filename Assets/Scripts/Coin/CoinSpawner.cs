@@ -28,7 +28,7 @@ public class CoinSpawner : MonoBehaviour
     {
         for(int i = 0; i< _countCoins; i++)
         {
-            CreateCoin();
+            Spawn();
         }
     }
 
@@ -40,7 +40,7 @@ public class CoinSpawner : MonoBehaviour
         }
     }
 
-    private Coin CreateCoin()
+    private Coin Spawn()
     {
         Transform point = _pointsForSpawn[Random.Range(0, _pointsForSpawn.Count)];
         _pointsForSpawn.Remove(point);
@@ -64,7 +64,7 @@ public class CoinSpawner : MonoBehaviour
             }
         }
         _coinsSpawned.Remove(point);
-        CreateCoin();
+        Spawn();
         _pointsForSpawn.Add(point);       
     }
 }

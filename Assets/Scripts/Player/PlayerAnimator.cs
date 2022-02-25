@@ -1,19 +1,19 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(PlayerMove))]
+[RequireComponent(typeof(PlayerMover))]
 public class PlayerAnimator : MonoBehaviour
 {
-    private const string VELOCITY_X_KEY = "VelocityX";
-    private const string VELOCITY_Y_KEY = "VelocityY";
+    private const string VelocityXKey = "VelocityX";
+    private const string VelocityYKey = "VelocityY";
 
     private Animator _animator;
-    private PlayerMove _mover;
+    private PlayerMover _mover;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _mover = GetComponent<PlayerMove>();
+        _mover = GetComponent<PlayerMover>();
     }
 
     private void OnEnable()
@@ -36,7 +36,7 @@ public class PlayerAnimator : MonoBehaviour
         {
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
-        _animator.SetFloat(VELOCITY_X_KEY, Mathf.Abs(velocity.x));
-        _animator.SetFloat(VELOCITY_Y_KEY, velocity.y);
+        _animator.SetFloat(VelocityXKey, Mathf.Abs(velocity.x));
+        _animator.SetFloat(VelocityYKey, velocity.y);
     }
 }
